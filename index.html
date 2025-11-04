@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Only Games — Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: url('https://wallpapercave.com/wp/wp9209103.jpg');
+  --glass: rgba(255,255,255,0.4);
+  --text: #111;
+  --primary: #0b57d0;
+  font-family: 'Inter', sans-serif;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background-image: var(--bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  color: var(--text);
+  padding-top: 80px; /* room for fixed navbar */
+  display: flex;
+  justify-content: center;
+  position: relative;
+  min-height: 100vh;
+}
+
+/* top navbar */
+nav {
+  position: fixed;
+  top:0; left:0; right:0;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  background: rgba(255,255,255,0.5);
+  backdrop-filter: blur(12px);
+  z-index: 1000;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius:16px;
+}
+nav h1 {
+  font-size: 28px;
+  font-weight: 800;
+}
+nav .nav-actions { display:flex; gap:12px; align-items:center; }
+nav .nav-actions button, nav .nav-actions a {
+  background: var(--primary);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+/* container */
+.container {
+  width: 100%;
+  max-width: 1100px;
+  backdrop-filter: blur(10px);
+  border-radius: 24px;
+  padding: 30px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+  background: rgba(255,255,255,0.25);
+  position: relative;
+  z-index: 2;
+}
+
+/* side floating panels */
+.side-panel {
+  position: fixed;
+  top: 120px;
+  width: 180px;
+  padding: 16px;
+  background: rgba(255,255,255,0.35);
+  backdrop-filter: blur(10px);
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+  font-size: 14px;
+  color: var(--text);
+}
+#left-panel { left: 18px; }
+#right-panel { right: 18px; }
+.side-panel p { margin: 8px 0; }
+
+/* sections */
+section { display: none; padding-bottom: 30px; }
+section.active { display: block; }
+
+/* store / product grid */
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 20px;
+}
+.card {
+  background: rgba(255,255,255,0.75);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+  display:flex;
+  flex-direction:column;
+}
+.card img {
+  width:100%;
+  height:160px;
+  object-fit:cover;
+}
+.card .info { padding: 14px; display:flex;flex-direction:column; gap:8px; flex:1; }
+.card h3 { font-size:16px; font-weight:700; margin:0; }
+.card p { margin:0; color:#333; }
+.card .actions { margin-top:auto; display:flex; justify-content:space-between; align-items:center; gap:8px; }
+.card button { background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:8px; cursor:pointer; }
+
+/* panel / cart / forms */
+.panel {
+  background: rgba(255,255,255,0.78);
+  padding: 20px;
+  border-radius: 18px;
+  backdrop-filter: blur(10px);
+}
+.panel h2 { margin-bottom: 12px; }
+.cart-item { display:flex; justify-content:space-between; margin-bottom:10px; }
+.total-line { display:flex; justify-content:space-between; margin-top:12px; font-weight:700; }
+
+/* inputs */
+input[type="text"], input[type="tel"], select, textarea {
+  width:100%; padding:10px; border-radius:8px; border:1px solid rgba(0,0,0,0.08); margin-bottom:12px;
+  background: rgba(255,255,255,0.95);
+}
+textarea { min-height:80px; resize:vertical; }
+
+/* small utilities */
+.btn { background:var(--primary); color:white; border:none; padding:10px 14px; border-radius:8px; cursor:pointer; }
+.btn-ghost { background:transparent; border:1px solid rgba(0,0,0,0.08); padding:10px 14px; border-radius:8px; cursor:pointer; }
+
+/* reviews */
+.reviews { margin-top:30px; }
+.review { background: rgba(255,255,255,0.78); padding:12px; border-radius:12px; margin-bottom:10px; }
+
+/* animations */
+section { animation: fade .35s ease; }
+@keyframes fade { from { opacity: 0; transform: translateY(6px);} to { opacity:1; transform:none } }
+
+/* responsive */
+@media (max-width:980px){
+  #left-panel, #right-panel { display:none; }
+  nav { padding:0 16px; }
+  .container { padding:18px; }
+}
+</style>
+</head>
+<body>
+
+  <!-- side info panels (static on all pages) -->
+  <div id="left-panel" class="side-panel">
+    <p>💿 <strong>100% Original DVDs</strong></p>
+    <p>🚚 <strong>Islandwide Delivery</strong></p>
+    <p>⭐ <strong>Trusted by 1,000+ Gamers</strong></p>
+  </div>
+
+  <div id="right-panel" class="side-panel">
+    <p>🎮 <strong>Latest Titles</strong></p>
+    <p>💳 <strong>Secure Payments</strong></p>
+    <p>🏆 <strong>Satisfaction Guaranteed</strong></p>
+  </div>
+
+  <!-- top navbar -->
+  <nav>
+    <h1>Only Games</h1>
+    <div class="nav-actions">
+      <a href="#" onclick="showSection('store')" class="btn-ghost">Store</a>
+      <a href="#" onclick="showSection('store')" class="btn-ghost">Home</a>
+      <button onclick="showSection('cart')">🛒 Cart (<span id="cartCount">0</span>)</button>
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- STORE -->
+    <section id="store" class="active">
+      <h2>Top Selling Games (DVDs)</h2>
+      <div class="products" id="productList"></div>
+
+      <div class="reviews">
+        <h3>Customer Reviews</h3>
+        <div class="review"><strong>Kasun R.</strong><br>“Got GTA V DVD in perfect condition — fast delivery!”</div>
+        <div class="review"><strong>Dinithi P.</strong><br>“Cheaper than anywhere else, and works flawlessly.”</div>
+        <div class="review"><strong>Tharindu J.</strong><br>“Highly recommend Only Games. Excellent service.”</div>
+        <p style="margin-top:10px;font-weight:600;">🎮 Grab your favorite game today — authentic DVDs, unbeatable prices, trusted by gamers island-wide.</p>
+      </div>
+    </section>
+
+    <!-- CART -->
+    <section id="cart">
+      <div class="panel">
+        <h2>Your Cart</h2>
+        <div id="cartItems"></div>
+        <div class="total-line"><span>Total</span><span>LKR <span id="total">0</span></span></div>
+        <div style="margin-top:14px;display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn-ghost" onclick="showSection('store')">Continue Shopping</button>
+          <button class="btn" onclick="proceedToCheckout()">Checkout</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ADDRESS -->
+    <section id="address">
+      <div class="panel">
+        <h2>Shipping Details</h2>
+        <input id="fullname" type="text" placeholder="Full Name" required>
+        <textarea id="address1" placeholder="Full Address (street, city, province)" required></textarea>
+        <input id="postal" type="text" placeholder="Postal / ZIP code" required>
+        <input id="phone" type="tel" placeholder="Phone number (e.g. +94 7XXXXXXXX)" required>
+        <div style="display:flex;gap:10px">
+          <button class="btn-ghost" onclick="showSection('cart')">Back to Cart</button>
+          <button class="btn" onclick="validateAddress()">Next — Payment</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- PAYMENT -->
+    <section id="payment">
+      <div class="panel">
+        <h2>Payment</h2>
+        <label for="payMethod">Select method</label>
+        <select id="payMethod">
+          <option value="visa">Visa / Mastercard (Card)</option>
+          <option value="bank">Bank Transfer</option>
+        </select>
+
+        <div id="visaFields" style="margin-top:12px;">
+          <input type="text" placeholder="Card number (mock)" />
+          <input type="text" placeholder="Expiry (MM/YY)" />
+          <input type="text" placeholder="CVC" />
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button class="btn-ghost" onclick="showSection('address')">Back</button>
+            <button class="btn" onclick="completePayment('card')">Pay (Mock)</button>
+          </div>
+        </div>
+
+        <div id="bankFields" style="display:none;margin-top:12px;">
+          <p>
+            Transfer the total amount to:<br>
+            <strong>Commercial Bank — Kuliyapitiya</strong><br>
+            <strong>Account number: 8022141565</strong><br>
+            After transfer, please send a screenshot of the payment to: <strong>+94 765843601</strong>.<br>
+            Once we confirm the transfer your order will be processed and dispatched.
+          </p>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <button class="btn-ghost" onclick="showSection('address')">Back</button>
+            <button class="btn" onclick="completePayment('bank')">I have transferred — Notify</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONFIRM -->
+    <section id="confirm">
+      <div class="panel">
+        <h2>✅ Order Submitted</h2>
+        <p>Thank you! Your order has been submitted. If you used Bank Transfer, please send the transfer screenshot to <strong>+94 765843601</strong> and we will confirm it shortly.</p>
+        <div style="display:flex;gap:10px;margin-top:12px">
+          <button class="btn" onclick="resetStore()">Return to Store</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+
+<script>
+// Product / cart logic
+const products = [
+  { name: 'GTA V', price: 2499, img: 'https://wallpapercave.com/wp/wp1809647.jpg' },
+  { name: 'Forza Horizon 5', price: 2499, img: 'https://cdn.wallpapersafari.com/68/21/KfdW0L.jpg' },
+  { name: 'COD Black Ops 6', price: 2499, img: 'https://gepig.com/game_cover_460w/7752.jpg' },
+  { name: 'COD MWIII', price: 1999, img: 'https://assets.xboxservices.com/assets/64/ea/64ea9f0e-6c8f-44f9-8866-429edbad9784.jpg?n=2626994_Poster-Image-1084_1920x1080_02.jpg' },
+  { name: 'COD MWII', price: 1999, img: 'https://shared.fastly.steamstatic.com/store_item_assets/steam/apps/3595230/03a32ef57a71955100af89dc40add1c4535fd813/capsule_616x353.jpg' },
+  { name: 'FIFA Sports 23', price: 1999, img: 'https://library.sportingnews.com/styles/crop_style_16_9_desktop_webp/s3/2022-08/kk.jpg.webp?itok=GRsX3xcy' }
+];
+
+let cart = [];
+
+// show/hide sections
+function showSection(id){
+  document.querySelectorAll('section').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(id);
+  if(el) el.classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// load products
+function loadProducts(){
+  const container = document.getElementById('productList');
+  container.innerHTML = '';
+  products.forEach((p, i) => {
+    const card = document.createElement('div');
+    card.className = 'card';
+    card.innerHTML = `
+      <img src="${p.img}" alt="${p.name}">
+      <div class="info">
+        <h3>${p.name}</h3>
+        <p>LKR ${p.price}</p>
+        <div class="actions">
+          <button onclick="addToCart(${i})">Add to Cart</button>
+        </div>
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+// cart functions
+function addToCart(index){
+  cart.push(products[index]);
+  updateCartUI();
+  alert(products[index].name + ' added to cart');
+}
+function updateCartUI(){
+  document.getElementById('cartCount').textContent = cart.length;
+  const items = document.getElementById('cartItems');
+  items.innerHTML = '';
+  let total = 0;
+  cart.forEach((it, i) => {
+    total += it.price;
+    const div = document.createElement('div');
+    div.className = 'cart-item';
+    div.innerHTML = `<div>${it.name}</div><div>LKR ${it.price}</div>`;
+    items.appendChild(div);
+  });
+  document.getElementById('total').textContent = total;
+}
+function proceedToCheckout(){
+  if(cart.length === 0) { alert('Your cart is empty'); return; }
+  showSection('address');
+}
+
+// address validation
+function validateAddress(){
+  const fullname = document.getElementById('fullname').value.trim();
+  const address1 = document.getElementById('address1').value.trim();
+  const postal = document.getElementById('postal').value.trim();
+  const phone = document.getElementById('phone').value.trim();
+  if(!fullname || !address1 || !postal || !phone) {
+    alert('Please fill all required fields');
+    return;
+  }
+  showSection('payment');
+}
+
+// payment method toggle
+document.getElementById('payMethod').addEventListener('change', function(e){
+  const v = e.target.value;
+  document.getElementById('visaFields').style.display = v === 'visa' ? 'block' : 'none';
+  document.getElementById('bankFields').style.display = v === 'bank' ? 'block' : 'none';
+});
+
+// complete payment (mock)
+function completePayment(method){
+  // in real site: send order to server & process payment
+  if(method === 'card') {
+    // mock card validation could be added here
+    showConfirmation();
+  } else if(method === 'bank') {
+    // bank transfer: show confirmation and instructions
+    alert('Please transfer the total amount to the account shown and send the screenshot to +94 765843601. Then click "Notify" to finish.');
+    showConfirmation();
+  }
+}
+
+function confirmOrder(){ completePayment('card'); } // helper
+
+function showConfirmation(){
+  showSection('confirm');
+  // optionally clear cart or keep for records
+  cart = [];
+  updateCartUI();
+}
+
+// Reset to store
+function resetStore(){
+  document.getElementById('fullname').value = '';
+  document.getElementById('address1').value = '';
+  document.getElementById('postal').value = '';
+  document.getElementById('phone').value = '';
+  showSection('store');
+}
+
+// initialize
+loadProducts();
+updateCartUI();
+showSection('store');
+</script>
+</body>
+</html>
